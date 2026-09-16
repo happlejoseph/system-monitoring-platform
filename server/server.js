@@ -1,7 +1,9 @@
 
 
 import express from "express";
+import connectDB from './src/congig/db.js'
 
+connectDB();
 
 const app = express();
 
