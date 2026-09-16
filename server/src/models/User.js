@@ -1,8 +1,9 @@
 
 
-import mongoose, { Types } from 'mongoose';
+import mongoose from 'mongoose';
 
-const userSchema = new moongoose.Schema({
+
+const userSchema = new mongoose.Schema({
 
     name: {
         type: String,
@@ -17,20 +18,20 @@ const userSchema = new moongoose.Schema({
         lowercase: true
     },
 
-    pasaword: {
+    password: {
         type: String,
         required: true,
         trim: true
     },
 
     role: {
-        trpe: String,
+        type: String,
         enum: ['admin', 'operator', 'viewer'],
         default: 'viewer'
     }
 
 }, {timestamps: true});
 
-const User = moongoose.model('User', userSchema)
+const User = mongoose.model('User', userSchema)
 
 export default User;
