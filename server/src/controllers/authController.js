@@ -44,3 +44,24 @@ export const register = async(req, res)=> {
         })
     }
 }
+
+
+export const login = async(req, res)=> {
+
+    try{
+
+        const {name, email, password} = req.body;
+
+        if(!name || !email || !password) {
+            return res.status(400).json({
+                message: 'All field required'
+            });
+        }
+    }
+
+    catch(error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+}
