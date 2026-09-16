@@ -50,13 +50,53 @@ export const login = async(req, res)=> {
 
     try{
 
-        const {name, email, password} = req.body;
+        const {email, password} = req.body;
 
-        if(!name || !email || !password) {
+        if(!email || !password) {
             return res.status(400).json({
-                message: 'All field required'
+                message: 'Email and password are required'
             });
         }
+
+        const user = await User.findOne({email});
+
+        if(!user) {
+            return res.status(404).json({
+                message: 'User not found'
+            });
+        }
+
+        const isPasswordMatch = await bcrypt.compare(
+            password, user.password
+        );
+
+        if(!isPasswordMatch) {
+            return res.status(401).json({
+                message: 'Invalid password'
+            });
+        }
+
+        const token = JsonWebTokenError.sign(
+            {
+                id: user._id, role: user.role
+            },
+            process.env.JWT_SECRET,
+            {
+                expiresIn: '6d'
+            }
+        );
+
+        res.status(200).json({
+            message: 'Login successful',
+            token,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role
+            }
+        })
+
     }
 
     catch(error) {
