@@ -88,3 +88,70 @@ export const getServerById = async(req, res)=> {
         });
     }
 }
+
+
+
+export const updateServer = async(req, res)=> {
+
+    try {
+
+        const {id} = req.params;
+        const {name, hostname, ipAddress, status} = req.body;
+
+        const server = await Server.findByIdAndUpdate(
+            id,
+            {
+                name, hostname, ipAddress, status
+            },
+            {
+                new: true,
+                runValidators: true
+            }
+        );
+
+        if(!server) {
+            return res.status(404).json({
+                message: 'Server not found'
+            });
+        }
+
+        res.status(201).json({
+            message: 'Server updated successfully',
+            server
+        });
+    }
+
+    catch(error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+}
+
+
+
+export const removeServer = async(req, res)=> {
+
+    try {
+        
+        const {id} = req.params;
+
+        const server = await Server.findByIdAndDelete(id);
+
+        if(!server) {
+            return res.status(404).json({
+                message: 'Server not found'
+            });
+
+            res.status(201).json({
+                message: 'Server removed successfully'
+            });
+        }
+    }
+
+    catch(error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+}
