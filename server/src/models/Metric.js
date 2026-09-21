@@ -25,13 +25,6 @@ const MetricSchema = new mongoose.Schema({
         max: 100
     },
 
-    memory: {
-        type: Number,
-        required: true,
-        min: 0,
-        max: 100
-    },
-
     disk: {
         type: Number,
         required: true,
