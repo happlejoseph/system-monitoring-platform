@@ -61,3 +61,32 @@ export const getMetrics = async(req, res)=> {
         });
     }
 }
+
+
+
+export const getMetricsById = async(req, res)=> {
+
+    try {
+
+        const {id} = req.params;
+
+        const metric = await Metric.findById(id).populate('server');
+
+        if(!metric) {
+            return res.status(404).json({
+                message: 'Metric not found'
+            });
+        }
+
+        res.status(200).json({
+            message: 'Metric fetched successfully',
+            metric
+        });
+    }
+
+    catch(error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+}
