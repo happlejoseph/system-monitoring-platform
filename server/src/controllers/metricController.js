@@ -2,6 +2,7 @@
 
 import Metric from "../models/Metric.js";
 import Server from "../models/Server.js";
+import { checkAnomaly } from "../services/anomalyService.js";
 
 
 export const addMetric = async(req, res)=> {
@@ -27,6 +28,8 @@ export const addMetric = async(req, res)=> {
         const metric = await Metric.create({
             server, cpu, memory, disk, temperature, fanSpeed
         });
+
+        const anomalies = checkAnomaly(metric);
 
         res.status(200).json({
             message: 'Metric added successfully',
