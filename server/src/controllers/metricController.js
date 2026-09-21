@@ -129,3 +129,31 @@ export const updateMetric = async(req, res)=> {
         });
     }
 }
+
+
+
+export const removeMetric = async(req, res)=> {
+
+    try {
+
+        const {id} = req.params;
+
+        const metric = await Metric.findByIdAndDelete(id);
+
+        if(!metric) {
+            return res.status(401).json({
+                message: 'Metric not found'
+            });
+        }
+
+        res.status(200).json({
+            message: 'Metric removed successfully'
+        });
+    }
+
+    catch(error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+}
