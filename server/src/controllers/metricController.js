@@ -90,3 +90,42 @@ export const getMetricsById = async(req, res)=> {
         });
     }
 }
+
+
+
+export const updateMetric = async(req, res)=> {
+
+    try {
+        
+        const {id} = req.params;
+        const {cpu, memory, disk, temperature, fanSpeed} = req.body;
+
+        const metric = await Metric.findByIdAndUpdate(
+            id,
+            {
+                cpu, memory, disk, temperature, fanSpeed
+            },
+            {
+                new: true,
+                runValidators: true
+            }
+        ).populate('server');
+
+        if(!metric) {
+            return res.status(404).json({
+                message: 'Metric not found'
+            });
+        }
+
+        res.status(200).json({
+            message: 'Metric updated successfully',
+            metric
+        });
+    }
+
+    catch(error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+}
