@@ -1,15 +1,15 @@
 
 
-import exprss from 'express';
+import express from 'express';
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import serverRoutes from './routes/serverRoutes.js';
 import metricRoutes from './routes/metricRoutes.js';
 
 
-const app = exprss();
+const app = express();
 
-app.use(exprss.json());
+app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 

@@ -1,9 +1,9 @@
 
 
 import express from 'express';
-import { auth } from '../middleware/authMiddleware';
-import { allowRoles } from '../middleware/roleMiddleware';
-import { addServer, getServerById, getServers, removeServer, updateServer } from '../controllers/serverController';
+import { auth } from '../middleware/authMiddleware.js';
+import { allowRoles } from '../middleware/roleMiddleware.js';
+import { addServer, getServerById, getServers, removeServer, updateServer } from '../controllers/serverController.js';
 
 
 const router = express.Router();
