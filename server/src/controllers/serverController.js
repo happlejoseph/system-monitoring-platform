@@ -9,7 +9,7 @@ export const addServer = async(req, res)=> {
 
         const {name, hostname, ipAddress} = req.body;
 
-        if(!name || !hostname ||!ipAdress) {
+        if(!name || !hostname ||!ipAddress) {
             return res.status(400).json({
                 message: 'All fields are required'
             });
@@ -142,11 +142,11 @@ export const removeServer = async(req, res)=> {
             return res.status(404).json({
                 message: 'Server not found'
             });
+        }
 
-            res.status(201).json({
+         res.status(200).json({
                 message: 'Server removed successfully'
             });
-        }
     }
 
     catch(error) {

@@ -9,7 +9,7 @@ export const addMetric = async(req, res)=> {
 
     try {
 
-        const {server, cpu, memory, disk, temperature, fanspeed} = req.body;
+        const {server, cpu, memory, disk, temperature, fanSpeed} = req.body;
 
         if(!server || cpu === undefined || memory === undefined || disk === undefined || temperature === undefined || fanspeed === undefined) {
             return res.status(400).json({

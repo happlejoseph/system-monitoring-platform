@@ -1,5 +1,27 @@
 
 
+import Alert from "../models/Alert.js";
+
+
+export const createAlert = async(server, metric, message)=> {
+
+    try {
+
+        const alert = await Alert.create({
+            server, metric, message, severity: 'high'
+        });
+        return alert
+    }
+
+    catch(error) {
+        console.log('Failed to create alert', error.message);
+        return null;
+        
+    }
+}
+
+
+
 export const checkAnomaly = (metric)=> {
 
     const anomalies = [];

@@ -7,13 +7,13 @@ const alertSchema = new mongoose.Schema({
 
     server: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'server',
+        ref: 'Server',
         required: true
     },
 
     metric: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'metric',
+        ref: 'Metric',
         required: true
     },
 
@@ -35,11 +35,8 @@ const alertSchema = new mongoose.Schema({
         default: 'active'
     },
 
-    timestamps: {
-        type: Date,
-        default: Date.now
-    }
-}, {timestamps});
+
+    }, {timestamps: true});
 
 const Alert = mongoose.model('Alert', alertSchema);
 
