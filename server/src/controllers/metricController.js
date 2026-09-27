@@ -2,6 +2,7 @@
 
 import Metric from "../models/Metric.js";
 import Server from "../models/Server.js";
+import { getIO } from "../socket.js";
 import { checkAnomaly, createAlert } from "../services/anomalyService.js";
 
 
@@ -28,6 +29,10 @@ export const addMetric = async(req, res)=> {
         const metric = await Metric.create({
             server, cpu, memory, disk, temperature, fanSpeed
         });
+
+        const io = getIO();
+
+        io.emit('newMetric', metric)
 
         const anomalies = checkAnomaly(metric);
 
