@@ -2,7 +2,7 @@
 
 import Metric from "../models/Metric.js";
 import Server from "../models/Server.js";
-import { checkAnomaly } from "../services/anomalyService.js";
+import { checkAnomaly, createAlert } from "../services/anomalyService.js";
 
 
 export const addMetric = async(req, res)=> {
@@ -11,7 +11,7 @@ export const addMetric = async(req, res)=> {
 
         const {server, cpu, memory, disk, temperature, fanSpeed} = req.body;
 
-        if(!server || cpu === undefined || memory === undefined || disk === undefined || temperature === undefined || fanspeed === undefined) {
+        if(!server || cpu === undefined || memory === undefined || disk === undefined || temperature === undefined || fanSpeed === undefined) {
             return res.status(400).json({
                 message: 'All metric fields are required'
             });
@@ -30,6 +30,10 @@ export const addMetric = async(req, res)=> {
         });
 
         const anomalies = checkAnomaly(metric);
+
+        for(const anomaly of anomalies) {
+            await createAlert(server, metric._id, anomaly);
+        }
 
         res.status(200).json({
             message: 'Metric added successfully',

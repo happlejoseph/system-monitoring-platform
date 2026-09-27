@@ -5,6 +5,7 @@ import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import serverRoutes from './routes/serverRoutes.js';
 import metricRoutes from './routes/metricRoutes.js';
+import alertRoutes from './routes/alertRoutes.js';
 
 
 const app = express();
@@ -18,5 +19,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/servers', serverRoutes);
 
 app.use('/api/metrics', metricRoutes);
+
+app.use('/api/alerts', alertRoutes);
 
 export default app;
