@@ -1,37 +1,47 @@
 
 
-import mongoose from "mongoose";
-
-
 const serverSchema = new mongoose.Schema({
 
     name: {
         type: String,
-        requied: true,
+        required: true,
         trim: true
-
     },
 
     hostname: {
         type: String,
-        requied: true,
+        required: true,
         trim: true
     },
 
     ipAddress: {
         type: String,
-        requied: true,
+        required: true,
         trim: true
+    },
+
+    type: {
+        type: String,
+        enum: ["simulated", "live"],
+        default: "simulated"
+    },
+
+    processName: {
+        type: String,
+        trim: true
+    },
+
+    addedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
     },
 
     status: {
         type: String,
-        enum: ['active', 'inactive'],
-        default: 'active'
+        enum: ["active", "inactive"],
+        default: "active"
     }
-
-}, {timestamps: true})
-
+}, {timestamps: true});
 
 const Server = mongoose.model('Server', serverSchema);
 

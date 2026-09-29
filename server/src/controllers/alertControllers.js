@@ -1,6 +1,7 @@
 
 
 import Alert from "../models/Alert.js";
+import { createAuditLog } from "./auditLogController.js";
 
 
 export const getAlerts = async(req, res)=> {
@@ -43,6 +44,12 @@ export const acknowledgeAlert = async(req, res)=> {
                 message: 'Alert not found'
             });
         }
+
+        await createAuditLog(
+            req.user.id,
+            "ACKNOWLEDGE_ALERT",
+            `Acknowledged alert: ${alert.message}`
+        );
 
         res.status(200).json({
             message: 'Alert acknowledged successfully',
