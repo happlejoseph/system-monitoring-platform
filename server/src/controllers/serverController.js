@@ -7,7 +7,7 @@ export const addServer = async(req, res)=> {
 
     try {
 
-        const {name, hostname, ipAddress} = req.body;
+        const {name, hostname, ipAddress, type, processName} = req.body;
 
         if(!name || !hostname ||!ipAddress) {
             return res.status(400).json({
@@ -24,7 +24,7 @@ export const addServer = async(req, res)=> {
         }
 
         const server = await Server.create({
-            name, hostname, ipAddress
+            name, hostname, ipAddress, type, processName, addedBy: req.user.id
         });
 
         res.status(201).json({
@@ -96,7 +96,7 @@ export const updateServer = async(req, res)=> {
     try {
 
         const {id} = req.params;
-        const {name, hostname, ipAddress, status} = req.body;
+        const { name, hostname, ipAddress, type, processName, status } = req.body;
 
         const server = await Server.findByIdAndUpdate(
             id,
@@ -115,7 +115,7 @@ export const updateServer = async(req, res)=> {
             });
         }
 
-        res.status(201).json({
+        res.status(200).json({
             message: 'Server updated successfully',
             server
         });
