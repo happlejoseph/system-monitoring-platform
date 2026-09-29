@@ -1,6 +1,6 @@
 
 
-import { PieChart, Pie, Cell, label } from "recharts";
+import { PieChart, Pie, Cell, Label} from "recharts";
 
 
 const MetricChart = ({value, label})=> {
@@ -31,8 +31,7 @@ const MetricChart = ({value, label})=> {
             />
         </Pie>
         </PieChart>
-
-        <p>{label}</p>
+        
     </div>   
     )
 }

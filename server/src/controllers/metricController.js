@@ -36,8 +36,15 @@ export const addMetric = async(req, res)=> {
 
         const anomalies = checkAnomaly(metric);
 
+
         for(const anomaly of anomalies) {
-            await createAlert(server, metric._id, anomaly);
+            const alert = await createAlert(
+                server, metric._id, anomaly
+            );
+
+            if(alert) {
+                io.emit('newAlert', alert);
+            }
         }
 
         res.status(200).json({

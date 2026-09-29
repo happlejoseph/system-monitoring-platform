@@ -1,5 +1,8 @@
 
 
+import jwt from 'jsonwebtoken';
+
+
 export const allowRoles = (...roles)=> {
     return (req, res, next)=> {
 

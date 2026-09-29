@@ -34,7 +34,8 @@ export const acknowledgeAlert = async(req, res)=> {
 
         const alert = await Alert.findByIdAndUpdate(
             id,
-            {status: 'acknowledged'}, {new: true}
+            {status: 'acknowledged'},
+            {new: true}
         );
 
         if(!alert) {
