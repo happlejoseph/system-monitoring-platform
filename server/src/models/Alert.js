@@ -35,6 +35,11 @@ const alertSchema = new mongoose.Schema({
         default: 'active'
     },
 
+    acknowledgedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        default: null
+    }
 
     }, {timestamps: true});
 

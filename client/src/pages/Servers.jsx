@@ -312,6 +312,17 @@ const Servers = () => {
                                 Status: {server.status}
                             </p>
 
+                            <p>
+                                Connection: {server.connectionStatus}
+                            </p>
+
+                            <p>
+                                Last Seen: {''}
+                                {
+                                    server.lastSeen ? new Date(server.lastSeen).toLocaleString() : 'Never'
+                                }
+                            </p>
+
 
                             <button
                                 onClick={() => {

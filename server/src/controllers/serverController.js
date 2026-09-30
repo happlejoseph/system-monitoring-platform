@@ -30,8 +30,8 @@ export const addServer = async(req, res)=> {
 
         await createAuditLog(
             req.user.id,
-            "REMOVE_SERVER",
-            `Removed monitored server: ${server.name}`
+            "ADD_SERVER",
+            `Added monitored server: ${server.name}`
         )
 
         res.status(201).json({
@@ -116,17 +116,18 @@ export const updateServer = async(req, res)=> {
             }
         );
 
-        await createAuditLog(
-            req.user.id,
-            "REMOVE_SERVER",
-            `Removed monitored server: ${server.name}`
-        );
-
         if(!server) {
             return res.status(404).json({
                 message: 'Server not found'
             });
         }
+
+        await createAuditLog(
+            req.user.id,
+            "UPDATE_SERVER",
+            `Updated monitored server: ${server.name}`
+        );
+
 
         res.status(200).json({
             message: 'Server updated successfully',

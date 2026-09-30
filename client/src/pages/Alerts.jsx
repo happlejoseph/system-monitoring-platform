@@ -38,12 +38,26 @@ const Alerts = () => {
             setAlerts((currentAlerts)=> {
                 return [newAlert, ...currentAlerts];
             });
+        };
+
+        const handleAlertUpdated = (updatedAlert)=> {
+
+            setAlerts((currentAlerts)=> {
+                return currentAlerts.map((alert)=> {
+
+                    if(alert._id === updatedAlert._id) {
+                        return updatedAlert;
+                    }
+                })
+            })
         }
 
         socket.on("newAlert", handleNewAlert);
+        socket.on("alertUpdated", handleAlertUpdated);
 
         return()=> {
             socket.off("newAlert", handleNewAlert);
+            socket.off("alertUpdated", handleAlertUpdated);
         }
     }, []);
 
@@ -78,39 +92,60 @@ const Alerts = () => {
 
     return (
 
-        <div>
-            <h1>Alerts</h1>
+    <div>
+        <h1>Alerts</h1>
 
-            {alerts.length === 0 ? (
-                <p>No alerts found.</p>) : (alerts.map((alert)=> (
+        {alerts.length === 0 ? (
+            <p>No alerts found.</p>
+        ) : (
+            alerts.map((alert) => (
 
-                    <div key={alert._id}>
+                <div key={alert._id}>
 
+                    <p>
+                        Server: {alert.server?.name || "Unknown"}
+                    </p>
+
+                    <p>
+                        {alert.message}
+                    </p>
+
+                    <p>
+                        Severity: {alert.severity}
+                    </p>
+
+                    <p>
+                        Status: {alert.status}
+                    </p>
+
+                    {alert.acknowledgedBy && (
                         <p>
-                            {alert.message}
+                            Acknowledged by: {alert.acknowledgedBy.name}
                         </p>
+                    )}
 
-                        <p>
-                            Severity: {alert.severity}
-                        </p>
+                    <p>
+                        Created: {new Date(alert.createdAt).toLocaleString()}
+                    </p>
 
-                        <p>
-                            Status: {alert.status}
-                        </p>
+                    {(
+                        user?.role === "admin" ||
+                        user?.role === "operator"
+                    ) &&
+                        alert.status === "active" && (
+                            <button
+                                onClick={() => handleAcknowledge(alert._id)}
+                            >
+                                Acknowledge
+                            </button>
+                        )}
 
-                        {(
-                            user?.role === "admin" || user?.role === "operator") && alert.status === "active" && (
-                                <button
-                                    onClick={()=> handleAcknowledge(alert._id)}>
-                                    Acknowledge
-                                </button>
-                            )}
+                </div>
 
-                    </div>
-                ))
-            )}
-        </div>
+            ))
+        )}
+    </div>
     );
-};
+}
 
 export default Alerts;

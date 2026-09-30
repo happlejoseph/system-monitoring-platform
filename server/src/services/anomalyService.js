@@ -46,6 +46,10 @@ export const createAlert = async(server, metric, message)=> {
             server, metric, message, severity: 'high'
         });
 
+        await alert.populate('server');
+        await alert.populate('metric');
+        await alert.populate('acknowledgedBy", "name email role')
+
         console.log("Alert created:", alert._id);
         console.log("Sending alert email...");
 
