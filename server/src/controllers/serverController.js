@@ -1,6 +1,7 @@
 
 
 import Server from '../models/Server.js';
+import { createAuditLog } from "./auditLogController.js";
 
 
 export const addServer = async(req, res)=> {
@@ -26,6 +27,12 @@ export const addServer = async(req, res)=> {
         const server = await Server.create({
             name, hostname, ipAddress, type, processName, addedBy: req.user.id
         });
+
+        await createAuditLog(
+            req.user.id,
+            "REMOVE_SERVER",
+            `Removed monitored server: ${server.name}`
+        )
 
         res.status(201).json({
             message: 'Server created successfully',
@@ -109,6 +116,12 @@ export const updateServer = async(req, res)=> {
             }
         );
 
+        await createAuditLog(
+            req.user.id,
+            "REMOVE_SERVER",
+            `Removed monitored server: ${server.name}`
+        );
+
         if(!server) {
             return res.status(404).json({
                 message: 'Server not found'
@@ -143,6 +156,12 @@ export const removeServer = async(req, res)=> {
                 message: 'Server not found'
             });
         }
+
+        await createAuditLog(
+            req.user.id,
+            "REMOVE_SERVER",
+            `Removed monitored server: ${server.name}`
+        )
 
          res.status(200).json({
                 message: 'Server removed successfully'
