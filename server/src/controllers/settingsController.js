@@ -1,6 +1,7 @@
 
 
 import Settings from "../models/Settings.js";
+import { createAuditLog } from "./auditLogController.js";
 
 
 export const getSettings = async(req, res)=> {
@@ -48,10 +49,17 @@ export const updateDataSource = async(req, res)=> {
             settings = await Settings.create({
                 dataSource
             });
-        } else {
+        }
+        else {
             settings.dataSource = dataSource;
             await settings.save();
         }
+
+        await createAuditLog(
+            req.user.id,
+            "UPDATE_DATA_SOURCE",
+            `Changed data source to: ${dataSource}`
+        )
 
     res.status(200).json({
             message: "Data source updated successfully",
