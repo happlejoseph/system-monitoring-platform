@@ -1,5 +1,8 @@
 
 
+import mongoose from "mongoose";
+
+
 const serverSchema = new mongoose.Schema({
 
     name: {
@@ -40,7 +43,20 @@ const serverSchema = new mongoose.Schema({
         type: String,
         enum: ["active", "inactive"],
         default: "active"
+    },
+
+    lastSeen: {
+        type: Date,
+        default: null
+    },
+
+    connectionStatus: {
+        type: String,
+        enum: ["online", "offline"],
+        default: 'offline'
     }
+
+
 }, {timestamps: true});
 
 const Server = mongoose.model('Server', serverSchema);

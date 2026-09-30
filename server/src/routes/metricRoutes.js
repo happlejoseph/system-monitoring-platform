@@ -3,12 +3,12 @@
 import express from 'express';
 import { auth } from '../middleware/authMiddleware.js';
 import { addMetric, getMetrics, getMetricsById, removeMetric, updateMetric } from '../controllers/metricController.js';
-
+import { monitoringAuth } from "../middleware/monitoringMiddleware.js";
 
 const router = express.Router();
 
 
-router.post('/', auth, addMetric);
+router.post('/', monitoringAuth, addMetric);
 
 router.get('/', auth, getMetrics);
 

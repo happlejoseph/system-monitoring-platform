@@ -8,7 +8,7 @@ export const addServer = async(req, res)=> {
 
     try {
 
-        const {name, hostname, ipAddress, type, processName} = req.body;
+        const {name, hostname, ipAddress, type, processName, status} = req.body;
 
         if(!name || !hostname ||!ipAddress) {
             return res.status(400).json({
@@ -108,7 +108,7 @@ export const updateServer = async(req, res)=> {
         const server = await Server.findByIdAndUpdate(
             id,
             {
-                name, hostname, ipAddress, status
+                name, hostname, ipAddress, type, processName, status
             },
             {
                 new: true,

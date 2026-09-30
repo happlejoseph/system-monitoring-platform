@@ -2,7 +2,8 @@
 
 import axios from "axios";
 import { getHardwareMetrics } from "../monitoring/hardwareMonitor.js";
-
+import Settings from "../models/Settings.js";
+import { getSimulatedMetrics } from "../monitoring/simulatedMonitor.js";
 
 
 
@@ -10,7 +11,16 @@ export const sendHardwareMetrics = async()=> {
     
     try {
 
-        const metrics = await getHardwareMetrics()
+        const settings = await Settings.findOne();
+
+        let metrics;
+
+        if(settings?.dataSource === 'simulated') {
+            metrics = getSimulatedMetrics();
+        }
+        else{
+            metrics = await getHardwareMetrics();
+        }
 
         await axios.post(
             `${process.env.MONITORING_SERVER_URL}/api/metrics`,

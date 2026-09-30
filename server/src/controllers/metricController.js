@@ -4,7 +4,7 @@ import Metric from "../models/Metric.js";
 import Server from "../models/Server.js";
 import { getIO } from "../socket.js";
 import { checkAnomaly, createAlert } from "../services/anomalyService.js";
-
+import { detectStatisticalAnomaly } from "../services/statisticalAnomalyService.js";
 
 export const addMetric = async(req, res)=> {
 
@@ -26,11 +26,74 @@ export const addMetric = async(req, res)=> {
             });
         }
 
+        await Server.findByIdAndUpdate(server, {
+            lastSeen: new Date(),
+            connectionStatus: "online"
+        });
+
         const metric = await Metric.create({
             server, cpu, memory, disk, temperature, fanSpeed
         });
 
         const io = getIO();
+
+        const memoryAnomaly = await detectStatisticalAnomaly(server, 'memory');
+        const diskAnomaly = await detectStatisticalAnomaly(server, 'disk');
+        const temperatureAnomaly = await detectStatisticalAnomaly(server, 'temperature');
+        const cpuAnomaly = await detectStatisticalAnomaly(server, 'cpu');
+
+        if(cpuAnomaly) {
+            const alert = await createAlert(
+                server,
+                metric._id,
+                'Statistical anomaly detected in CPU usage'
+            );
+
+            if(alert) {
+                io.emit('newAlert', alert);
+            }
+        };
+
+        
+        if(memoryAnomaly) {
+            const alert = await createAlert(
+                server,
+                metric._id,
+                'Statistical anomaly detected in Memory usage'
+            );
+
+            if(alert) {
+                io.emit('newAlert', alert)
+            }
+        };
+
+
+        if(diskAnomaly) {
+            const alert = await createAlert(
+                server,
+                metric._id,
+                'Statistical anomaly detected in Disk usage'
+            );
+
+            if(alert) {
+                io.emit('newAlert', alert)
+            }
+        }
+
+        if(temperatureAnomaly) {
+            const alert = await createAlert(
+                server,
+                metric._id,
+                'Statistical anomaly detected in Temperature usage'
+            );
+
+            if(alert) {
+                io.emit('newAlert', alert);
+            }
+        }
+
+        console.log("CPU statistical anomaly:", cpuAnomaly);
+
 
         io.emit('newMetric', metric)
 
@@ -160,7 +223,7 @@ export const removeMetric = async(req, res)=> {
         const metric = await Metric.findByIdAndDelete(id);
 
         if(!metric) {
-            return res.status(401).json({
+            return res.status(400).json({
                 message: 'Metric not found'
             });
         }

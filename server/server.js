@@ -8,6 +8,7 @@ import connectDB from './src/congig/db.js';
 import app from './src/app.js';
 import { initializeSocket } from './src/socket.js';
 import { startHardwareMonitoring } from './src/services/hardwareService.js';
+import { updateServerStatuses } from './src/services/serverStatusService.js';
 
 
 dotenv.config();
@@ -25,4 +26,7 @@ server.listen(PORT, ()=> {
 
     startHardwareMonitoring();
     
+    setInterval(async () => {
+        await updateServerStatuses();
+    }, 5000);
 });
