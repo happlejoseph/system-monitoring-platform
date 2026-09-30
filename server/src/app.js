@@ -9,13 +9,12 @@ import serverRoutes from './routes/serverRoutes.js';
 import metricRoutes from './routes/metricRoutes.js';
 import alertRoutes from './routes/alertRoutes.js';
 import auditLogRoutes from './routes/auditLogRoutes.js';
+import settingsRoutes from './routes/settingsRoutes.js';
 
 
 const app = express();
 
-app.use(cors({
-    origin: 'http://localhost:5173'
-}));
+app.use(cors({origin: 'http://localhost:5173'}));
 
 app.use(express.json());
 
@@ -30,5 +29,7 @@ app.use('/api/metrics', metricRoutes);
 app.use('/api/alerts', alertRoutes);
 
 app.use('/api/audit-logs', auditLogRoutes);
+
+app.use('/api/settings', settingsRoutes);
 
 export default app;
